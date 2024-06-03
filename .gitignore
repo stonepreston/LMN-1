@@ -7,3 +7,5 @@ cmake-build-debug/
 cmake-build-release/
 
 
+*.vsidx
+.vs
