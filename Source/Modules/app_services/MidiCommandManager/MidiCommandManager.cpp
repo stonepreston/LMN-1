@@ -32,6 +32,7 @@ MidiCommandManager::~MidiCommandManager() {
 }
 
 void MidiCommandManager::setFocusedComponent(juce::Component *c) {
+    jassert(c != nullptr);
     focusedComponent = c;
 }
 

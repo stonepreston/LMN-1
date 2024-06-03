@@ -53,6 +53,7 @@ namespace app_view_models {
     class MixerTrackViewModel;
     class SettingsListViewModel;
     class DeviceTypeListViewModel;
+    class LoadSaveSongListViewModel;
     class OutputListViewModel;
     class SampleRateListViewModel;
     class AudioBufferSizeListViewModel;
@@ -134,6 +135,7 @@ namespace app_view_models {
 // Settings
 #include "Edit/Settings/SettingsListViewModel.h"
 #include "Edit/Settings/DeviceTypeListViewModel.h"
+#include "Edit/Settings/LoadSaveSongListViewModel.h"
 #include "Edit/Settings/OutputListViewModel.h"
 #include "Edit/Settings/SampleRateListViewModel.h"
 #include "Edit/Settings/AudioBufferSizeListViewModel.h"

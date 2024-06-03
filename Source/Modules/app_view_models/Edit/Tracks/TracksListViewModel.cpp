@@ -194,9 +194,11 @@ TracksListViewModel::TracksViewType TracksListViewModel::getTracksViewType() {
 void TracksListViewModel::setTracksViewType(TracksViewType type) {
     tracksViewType.setValue(static_cast<int>(type), nullptr);
 }
-
 void TracksListViewModel::startRecording() {
     // ensure a selected track exists
+    
+    edit.clickTrackEnabled = true;
+
     if (auto selectedTrack = dynamic_cast<tracktion::AudioTrack *>(
             listViewModel.getSelectedItem())) {
         // only start recording if we currently arent recording
@@ -211,6 +213,8 @@ void TracksListViewModel::startRecording() {
 }
 
 void TracksListViewModel::startPlaying() {
+    edit.clickTrackEnabled = false;
+
     auto &transport = edit.getTransport();
 
     if (!transport.isPlaying()) {

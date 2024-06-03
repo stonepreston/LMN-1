@@ -1,5 +1,21 @@
 #include "ConfigurationHelpers.h"
 #include <yaml-cpp/yaml.h>
+#include "ConfigurationHelpers.h"
+
+juce::File ConfigurationHelpers::SAVED_TRACK_NAME;
+
+void ConfigurationHelpers::setSavedTrackName(const juce::File &newValue) {
+    SAVED_TRACK_NAME = newValue;
+}
+
+juce::File ConfigurationHelpers::getSavedTrackName() {
+    return SAVED_TRACK_NAME;
+}
+
+juce::String ConfigurationHelpers::getApplicationName(){
+    return ROOT_DIRECTORY_NAME;
+}
+
 
 bool ConfigurationHelpers::writeBinarySamplesToDirectory(
     const juce::File &destDir, juce::StringRef filename, const char *data,
@@ -160,6 +176,7 @@ double ConfigurationHelpers::getHeight(juce::File &configFile) {
     // Default to 480
     return 480;
 }
+
 
 juce::File ConfigurationHelpers::getSamplesDirectory() {
     auto userAppDataDirectory = juce::File::getSpecialLocation(

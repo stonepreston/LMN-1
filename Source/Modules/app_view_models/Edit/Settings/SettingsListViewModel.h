@@ -13,6 +13,7 @@ class SettingsListViewModel {
     juce::StringArray getItemNames();
     juce::String getSelectedItem();
 
+    const juce::String loadSaveTrackSettingName = "Load/Save track";
     const juce::String deviceTypeSettingName = "Device Type";
     const juce::String outputSettingName = "Output";
     const juce::String sampleRateSettingName = "Sample Rate";
@@ -23,9 +24,14 @@ class SettingsListViewModel {
     juce::AudioDeviceManager &deviceManager;
     juce::ValueTree state;
     juce::StringArray settingNames =
-        juce::StringArray(juce::Array<juce::String>(
-            {deviceTypeSettingName, outputSettingName, sampleRateSettingName,
-             audioBufferSizeSettingName, midiInputSettingName}));
+        juce::StringArray(juce::Array<juce::String>({
+            loadSaveTrackSettingName,
+            outputSettingName, 
+            deviceTypeSettingName,
+            sampleRateSettingName,
+            audioBufferSizeSettingName, 
+            midiInputSettingName,
+            }));
 
   public:
     // Must appear below the other variables since it needs to be initialized

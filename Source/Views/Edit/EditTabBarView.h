@@ -17,7 +17,6 @@ class EditTabBarView : public juce::TabbedComponent,
     ~EditTabBarView() override;
     void paint(juce::Graphics &) override;
     void resized() override;
-
     void tracksButtonReleased() override;
     void tempoSettingsButtonReleased() override;
     void saveButtonReleased() override;

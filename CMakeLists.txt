@@ -21,7 +21,7 @@ juce_add_gui_app(LMN-3
     # DOCUMENT_EXTENSIONS ...           # Specify file extensions that should be associated with this app
     # COMPANY_NAME ...                  # Specify the name of the app's author
     PRODUCT_NAME LMN-3         # The name of the final executable, which can differ from the target name
-)      
+)
 
 target_compile_features(LMN-3  PRIVATE cxx_std_17)
 
@@ -37,6 +37,7 @@ target_sources(LMN-3  PRIVATE
     Source/Views/LookAndFeel/ListItems/ListItemColour2LookAndFeel.cpp
     Source/Views/Edit/Settings/SettingsListView.cpp
     Source/Views/Edit/Settings/DeviceTypeListView.cpp
+    Source/Views/Edit/Settings/LoadSaveSongListView.cpp
     Source/Views/Edit/Settings/OutputListView.cpp
     Source/Views/Edit/Settings/SampleRateListView.cpp
     Source/Views/Edit/Settings/MidiInputListView.cpp
@@ -198,5 +199,3 @@ target_link_libraries(LMN-3
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
 )
-
-
