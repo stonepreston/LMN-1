@@ -487,5 +487,4 @@ void TracksView::noteOnPressed(int noteNumber) {
             }
         }
     }
-
 }

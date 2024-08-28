@@ -26,12 +26,12 @@ class SettingsListViewModel {
     juce::StringArray settingNames =
         juce::StringArray(juce::Array<juce::String>({
             loadSaveTrackSettingName,
-            outputSettingName, 
+            outputSettingName,
             deviceTypeSettingName,
             sampleRateSettingName,
-            audioBufferSizeSettingName, 
+            audioBufferSizeSettingName,
             midiInputSettingName,
-            }));
+        }));
 
   public:
     // Must appear below the other variables since it needs to be initialized

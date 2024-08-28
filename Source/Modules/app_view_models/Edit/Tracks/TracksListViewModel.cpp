@@ -196,7 +196,7 @@ void TracksListViewModel::setTracksViewType(TracksViewType type) {
 }
 void TracksListViewModel::startRecording() {
     // ensure a selected track exists
-    
+
     edit.clickTrackEnabled = true;
 
     if (auto selectedTrack = dynamic_cast<tracktion::AudioTrack *>(

@@ -6,8 +6,8 @@
 LoadSaveSongListView::LoadSaveSongListView(
     tracktion::Edit &e, juce::AudioDeviceManager &dm,
     app_services::MidiCommandManager &mcm)
-    : edit(e), deviceManager(dm), midiCommandManager(mcm),     
-      editTabBarView(e, mcm), 
+    : edit(e), deviceManager(dm), midiCommandManager(mcm),
+      editTabBarView(e, mcm),
       viewModel(e, deviceManager, ConfigurationHelpers::getApplicationName()),
       titledList(viewModel.getItemNames(), "Song list",
                  ListTitle::IconType::FONT_AWESOME,
@@ -71,7 +71,7 @@ void LoadSaveSongListView::encoder1ButtonReleased() {
                 userAppDataDirectory.getChildFile(JUCE_APPLICATION_NAME_STRING)
                     .getChildFile("load_project");
 
-            //mountname
+            // mountname
             auto currentTime = juce::Time::getCurrentTime();
             auto day =
                 juce::String(currentTime.getDayOfMonth()).paddedLeft('0', 2);
@@ -88,20 +88,18 @@ void LoadSaveSongListView::encoder1ButtonReleased() {
             juce::String newEditFileName = "edit_" + day + month + year +
                                            hours + minutes + seconds + ".xml";
             //
-            auto saveFile = savedDirectory.getChildFile(loadFileName);           
-            
+            auto saveFile = savedDirectory.getChildFile(loadFileName);
+
             if (saveFile.existsAsFile()) {
                 loadFile.copyFileTo(savedDirectory);
             } else {
                 if (savedDirectory.createDirectory()) {
                     if (loadFile.moveFileTo(saveFile)) {
-                        juce::Logger::writeToLog(
-                            "Track copied to: " +
-                            saveFile.getFullPathName());
+                        juce::Logger::writeToLog("Track copied to: " +
+                                                 saveFile.getFullPathName());
                     } else {
-                        juce::Logger::writeToLog(
-                            "Error copy to: " +
-                            saveFile.getFullPathName());
+                        juce::Logger::writeToLog("Error copy to: " +
+                                                 saveFile.getFullPathName());
                     }
                 } else {
                     juce::Logger::writeToLog(
@@ -113,15 +111,14 @@ void LoadSaveSongListView::encoder1ButtonReleased() {
             if (loadprojectDirectory.exists()) {
                 auto files = loadprojectDirectory.findChildFiles(
                     juce::File::findFiles, false);
-                for (auto& file : files) {
+                for (auto &file : files) {
                     file.deleteFile();
                 }
             }
 
-            auto editFile = loadprojectDirectory.getChildFile(newEditFileName); 
+            auto editFile = loadprojectDirectory.getChildFile(newEditFileName);
             editFile.create();
 
-            
             tracktion::Engine &engine = *tracktion::Engine::getEngines()[0];
             std::unique_ptr<tracktion::Edit> loadedEdit =
                 tracktion::loadEditFromFile(engine, saveFile);
@@ -130,9 +127,7 @@ void LoadSaveSongListView::encoder1ButtonReleased() {
                                .getTempDirectory()
                                .deleteRecursively();*/
 
-
-            restartApplication();          
-
+            restartApplication();
 
         } else { // Load
             juce::String projectName = viewModel.getItemNames()[index];
@@ -147,40 +142,35 @@ void LoadSaveSongListView::encoder1ButtonReleased() {
 
             if (projectFile.existsAsFile()) {
                 juce::Logger::writeToLog("Loading project: " + projectName);
-                loadTrackFromFile(projectFile);               
-                //mainWindow = nullptr; // (deletes our window)                
+                loadTrackFromFile(projectFile);
+                // mainWindow = nullptr; // (deletes our window)
             } else {
                 juce::Logger::writeToLog("Project file does not exist: " +
                                          projectFile.getFullPathName());
             }
             restartApplication();
-            
-        }         
+        }
     }
 }
 void LoadSaveSongListView::restartApplication() {
-  
     juce::String appPath =
         juce::File::getSpecialLocation(juce::File::currentExecutableFile)
             .getFullPathName();
 
-   
     juce::ChildProcess process;
     if (process.start(appPath)) {
-     
-        juce::Time::waitForMillisecondCounter(juce::Time::getMillisecondCounter() + 5000);
+        juce::Time::waitForMillisecondCounter(
+            juce::Time::getMillisecondCounter() + 5000);
         juce::JUCEApplication::getInstance()->quit();
 
-
-       
     } else {
         juce::Logger::writeToLog("Error al intentar reiniciar la aplicación.");
     }
 }
-//void LoadSaveSongListView::restartApplication() {
+// void LoadSaveSongListView::restartApplication() {
 ////    juce::Logger::writeToLog("Wait 2 seconds.");
 ////    // Esperar un breve momento para que la aplicación actual termine
-////    juce::Time::waitForMillisecondCounter(juce::Time::getMillisecondCounter() +
+//// juce::Time::waitForMillisecondCounter(juce::Time::getMillisecondCounter() +
 ////                                          2000);
 ////
 ////    // Obtener el nombre del ejecutable de la aplicación
@@ -234,7 +224,6 @@ void LoadSaveSongListView::loadTrackFromFile(const juce::File &projectFile) {
 
             if (loadprojectDirectory.exists() &&
                 loadprojectDirectory.isDirectory()) {
-                
                 juce::Array<juce::File> files;
                 loadprojectDirectory.findChildFiles(
                     files, juce::File::findFilesAndDirectories, true);
@@ -248,12 +237,12 @@ void LoadSaveSongListView::loadTrackFromFile(const juce::File &projectFile) {
                             "No se pudo eliminar el archivo: " +
                             file.getFullPathName());
                     }
-                } 
+                }
             } else {
                 juce::Logger::writeToLog(
                     "The directory does not exist or is not a directory.");
-            }   
-            
+            }
+
             juce::String fileName = projectFile.getFileName();
             juce::File destinationFile =
                 loadprojectDirectory.getChildFile(fileName);

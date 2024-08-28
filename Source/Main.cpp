@@ -1,12 +1,12 @@
+#include "App.h"
+#include "AppLookAndFeel.h"
+#include "ExtendedUIBehaviour.h"
 #include <ImageData.h>
 #include <app_configuration/app_configuration.h>
 #include <app_services/app_services.h>
 #include <internal_plugins/internal_plugins.h>
 #include <memory>
 #include <tracktion_engine/tracktion_engine.h>
-#include "App.h"
-#include "ExtendedUIBehaviour.h"
-#include "AppLookAndFeel.h"
 
 class GuiAppApplication : public juce::JUCEApplication {
   public:
@@ -14,7 +14,7 @@ class GuiAppApplication : public juce::JUCEApplication {
         return *dynamic_cast<GuiAppApplication *>(
             JUCEApplication::getInstance());
     }
-      GuiAppApplication()
+    GuiAppApplication()
         : splash(new juce::SplashScreen(
               "Welcome to my LMN-3!",
               juce::ImageFileFormat::loadFrom(
@@ -46,8 +46,6 @@ class GuiAppApplication : public juce::JUCEApplication {
         engine.getPluginManager()
             .createBuiltInType<internal_plugins::DrumSamplerPlugin>();
 
-
-
         // this can cache all your plugins.
         /* auto &knownPluginList = engine.getPluginManager().knownPluginList;
 
@@ -69,9 +67,6 @@ class GuiAppApplication : public juce::JUCEApplication {
             tracktion::ExternalPlugin::xmlTypeName,
             *pluginDescriptions.getLast());
             */
-        
-
-
 
         auto userAppDataDirectory = juce::File::getSpecialLocation(
             juce::File::userApplicationDataDirectory);
@@ -118,11 +113,8 @@ class GuiAppApplication : public juce::JUCEApplication {
             auto seconds =
                 juce::String(currentTime.getSeconds()).paddedLeft('0', 2);
 
-
-
             juce::String newEditFileName = "edit_" + day + month + year +
                                            hours + minutes + seconds + ".xml";
-
 
             auto editFile = savedDirectory.getChildFile(newEditFileName);
 
@@ -130,7 +122,8 @@ class GuiAppApplication : public juce::JUCEApplication {
             // Crear el archivo y la edición
             editFile.create();
             edit = tracktion::createEmptyEdit(engine, editFile);
-            edit->ensureNumberOfAudioTracks(tracktion::getAudioTracks(*edit).size());
+            edit->ensureNumberOfAudioTracks(
+                tracktion::getAudioTracks(*edit).size());
 
             for (auto track : tracktion::getAudioTracks(*edit))
                 track->setColour(appLookAndFeel.getRandomColour());
@@ -198,11 +191,10 @@ class GuiAppApplication : public juce::JUCEApplication {
 
         juce::Logger::writeToLog("end nullptr");
 
-        //restartApplication();
+        // restartApplication();
 
-        //juce::Logger::writeToLog("Restarted ok");
+        // juce::Logger::writeToLog("Restarted ok");
     }
-    
 
     void systemRequestedQuit() override {
         // This is called when the app is being asked to quit: you can ignore
@@ -216,7 +208,7 @@ class GuiAppApplication : public juce::JUCEApplication {
 
         juce::ChildProcess process;
         process.start(currentExecutable.getFullPathName());
-        //quit();
+        // quit();
     }
     void anotherInstanceStarted(const juce::String &commandLine) override {
         // When another instance of the app is launched while this one is

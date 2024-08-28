@@ -1,7 +1,7 @@
 #pragma once
+#include "EditTabBarView.h"
 #include "LabelColour1LookAndFeel.h"
 #include "TitledListView.h"
-#include "EditTabBarView.h"
 #include <MessageBox.h>
 #include <app_services/app_services.h>
 #include <app_view_models/app_view_models.h>
@@ -25,6 +25,7 @@ class LoadSaveSongListView : public juce::Component,
     void selectedIndexChanged(int newIndex) override;
 
     void loadTrackFromFile(const juce::File &projectFile);
+
   private:
     tracktion::Edit &edit;
     std::unique_ptr<tracktion::Edit> editTemp;

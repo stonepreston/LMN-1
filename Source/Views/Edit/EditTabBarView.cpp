@@ -131,12 +131,10 @@ void EditTabBarView::tempoSettingsButtonReleased() {
     }
 }*/
 
-
-void EditTabBarView::saveButtonReleased() {      
-
+void EditTabBarView::saveButtonReleased() {
     const auto track_name = ConfigurationHelpers::getSavedTrackName();
-    
-    //editFile.create();
+
+    // editFile.create();
     tracktion::EditFileOperations fileOperations(edit);
     auto userAppDataDirectory = juce::File::getSpecialLocation(
         juce::File::userApplicationDataDirectory);
@@ -145,8 +143,7 @@ void EditTabBarView::saveButtonReleased() {
         userAppDataDirectory.getChildFile(JUCE_APPLICATION_NAME_STRING)
             .getChildFile("saved");
 
-
-     if (!savedDirectory.exists()) {
+    if (!savedDirectory.exists()) {
         if (!savedDirectory.createDirectory()) {
             juce::Logger::writeToLog("Error creating folder: " +
                                      savedDirectory.getFullPathName());
@@ -154,11 +151,11 @@ void EditTabBarView::saveButtonReleased() {
         }
     }
 
-     if (track_name.exists()) {
+    if (track_name.exists()) {
         fileOperations.saveAs(track_name, true);
-    }    
-    auto saveFile = savedDirectory.getChildFile(track_name.getFileName());      
-    
+    }
+    auto saveFile = savedDirectory.getChildFile(track_name.getFileName());
+
     if (track_name.copyFileTo(saveFile)) {
         juce::Logger::writeToLog("Track copied to: " +
                                  saveFile.getFullPathName());
@@ -167,8 +164,10 @@ void EditTabBarView::saveButtonReleased() {
                                  saveFile.getFullPathName());
     }
 
-    juce::Logger::writeToLog("Complete! (" + track_name.getFileNameWithoutExtension() + ")");
-    messageBox.setMessage("Complete! (" + track_name.getFileNameWithoutExtension() + ")");
+    juce::Logger::writeToLog("Complete! (" +
+                             track_name.getFileNameWithoutExtension() + ")");
+    messageBox.setMessage("Complete! (" +
+                          track_name.getFileNameWithoutExtension() + ")");
     resized();
     messageBox.setVisible(true);
     startTimer(1000);

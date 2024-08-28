@@ -9,7 +9,6 @@ class ConfigurationHelpers {
     static inline const juce::String DRUM_KITS_DIRECTORY_NAME = "drum_kits";
     static juce::File SAVED_TRACK_NAME;
 
- 
     static juce::File getSamplesDirectory();
     static juce::File getDrumKitsDirectory();
     static juce::File getTempSamplesDirectory(tracktion::Engine &engine);
@@ -17,13 +16,14 @@ class ConfigurationHelpers {
     static void initSamples(tracktion::Engine &engine);
     static bool getShowTitleBar(juce::File &configFile);
     static double getWidth(juce::File &configFile);
-    static double getHeight(juce::File &configFile);    
-    static void setSavedTrackName(const juce::File &newValue); // Declaración del método
+    static double getHeight(juce::File &configFile);
+    static void
+    setSavedTrackName(const juce::File &newValue); // Declaración del método
     static juce::File getSavedTrackName();         // Declaración del método
-    static juce::String getApplicationName(); // Declaración del método
+    static juce::String getApplicationName();      // Declaración del método
 
   private:
-      static bool writeBinarySamplesToDirectory(const juce::File &destDir,
+    static bool writeBinarySamplesToDirectory(const juce::File &destDir,
                                               juce::StringRef filename,
                                               const char *data,
                                               int dataSizeInBytes);
@@ -36,5 +36,4 @@ class ConfigurationHelpers {
                                 const juce::File &tempDrumDir);
     static juce::File createTempDirectory(tracktion::Engine &engine,
                                           const juce::String &folderName);
-
 };

@@ -8,13 +8,11 @@ LoadSaveSongListViewModel::LoadSaveSongListViewModel(
     : deviceManager(dm), state(e.state.getOrCreateChildWithName(
                              IDs::LOAD_SAVE_SONG_VIEW_STATE, nullptr)),
       itemListState(state, songNames.size()) {
-
     auto userAppDataDirectory = juce::File::getSpecialLocation(
         juce::File::userApplicationDataDirectory);
     juce::File savedDirectory =
-        userAppDataDirectory.getChildFile(appName)
-            .getChildFile("saved");
-    
+        userAppDataDirectory.getChildFile(appName).getChildFile("saved");
+
     loadSongList(savedDirectory);
     itemListState.addListener(this);
 }
@@ -38,7 +36,7 @@ void LoadSaveSongListViewModel::selectedIndexChanged(int newIndex) {
 
 void LoadSaveSongListViewModel::loadSongList(const juce::File &directory) {
     songNames.clear();
-    songNames.add("Add");   
+    songNames.add("Add");
 
     juce::Array<juce::File> songFiles =
         directory.findChildFiles(juce::File::findFiles, false, "*.xml");
