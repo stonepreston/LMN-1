@@ -63,6 +63,7 @@
 // Settings
 #include "Edit/Settings/SettingsListViewModel.cpp"
 #include "Edit/Settings/DeviceTypeListViewModel.cpp"
+#include "Edit/Settings/LoadSaveSongListViewModel.cpp"
 #include "Edit/Settings/OutputListViewModel.cpp"
 #include "Edit/Settings/SampleRateListViewModel.cpp"
 #include "Edit/Settings/AudioBufferSizeListViewModel.cpp"

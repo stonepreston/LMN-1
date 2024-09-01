@@ -451,3 +451,40 @@ void TracksView::undoButtonReleased() {
         if (midiCommandManager.getFocusedComponent() == this)
             viewModel.undo();
 }
+
+// CJM
+void TracksView::noteOnPressed(int noteNumber) {
+    juce::Logger::writeToLog("noteOnPressed  noteNumber" +
+                             std::to_string(noteNumber));
+    if (midiCommandManager.isPlusDown) {
+        juce::Logger::writeToLog("Ha entrado en el mute");
+
+        int trackIndex = -1;
+
+        switch (noteNumber) {
+        case 53:
+            trackIndex = 1;
+            break;
+        case 54:
+            trackIndex = 2;
+            break;
+        case 55:
+            trackIndex = 3;
+            break;
+        case 56:
+            trackIndex = 4;
+            break;
+        default:
+            break;
+        }
+        if (trackIndex != -1) {
+            // Verifica si el índice es válido
+            if (trackIndex < viewModel.listViewModel.itemListState.listSize) {
+                viewModel.listViewModel.itemListState.setSelectedItemIndex(
+                    trackIndex);
+                informationPanel.setIsMuted(
+                    viewModel.getSelectedTrackMuteState());
+            }
+        }
+    }
+}

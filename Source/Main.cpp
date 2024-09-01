@@ -1,21 +1,22 @@
+#include "App.h"
+#include "AppLookAndFeel.h"
+#include "ExtendedUIBehaviour.h"
 #include <ImageData.h>
 #include <app_configuration/app_configuration.h>
 #include <app_services/app_services.h>
 #include <internal_plugins/internal_plugins.h>
 #include <memory>
 #include <tracktion_engine/tracktion_engine.h>
-//#include <SynthSampleData.h>
-//#include <DrumSampleData.h>
-#include "App.h"
-#include "ExtendedUIBehaviour.h"
-
-#include "AppLookAndFeel.h"
 
 class GuiAppApplication : public juce::JUCEApplication {
   public:
+    static GuiAppApplication &getInstance() {
+        return *dynamic_cast<GuiAppApplication *>(
+            JUCEApplication::getInstance());
+    }
     GuiAppApplication()
         : splash(new juce::SplashScreen(
-              "Welcome to my app!",
+              "Welcome to my LMN-3!",
               juce::ImageFileFormat::loadFrom(
                   ImageData::tracktion_engine_powered_png,
                   ImageData::tracktion_engine_powered_pngSize),
@@ -45,22 +46,88 @@ class GuiAppApplication : public juce::JUCEApplication {
         engine.getPluginManager()
             .createBuiltInType<internal_plugins::DrumSamplerPlugin>();
 
+        // this can cache all your plugins.
+        /* auto &knownPluginList = engine.getPluginManager().knownPluginList;
+
+        // the plugin needs to be exists
+        juce::File pluginFile("~/.vst3/TAL-NoiseMaker/TAL-NoiseMaker.vst3");
+
+        // these will be filled by the next function, so we get the
+        // pluginDescription
+        static juce::OwnedArray<juce::PluginDescription> pluginDescriptions;
+        static juce::VST3PluginFormat vst3PluginFormat;
+
+        // now you can add your plugin to the knownPluginList
+        knownPluginList.scanAndAddFile(
+            juce::String(pluginFile.getFullPathName()), true,
+            pluginDescriptions, vst3PluginFormat);
+
+        // get the plugin
+        auto plug = edit->getPluginCache().createNewPlugin(
+            tracktion::ExternalPlugin::xmlTypeName,
+            *pluginDescriptions.getLast());
+            */
+
         auto userAppDataDirectory = juce::File::getSpecialLocation(
             juce::File::userApplicationDataDirectory);
-        juce::File editFile =
+        juce::File savedDirectory =
             userAppDataDirectory.getChildFile(getApplicationName())
-                .getChildFile("edit");
-        if (editFile.existsAsFile()) {
-            edit = tracktion::loadEditFromFile(engine, editFile);
+                .getChildFile("load_project");
+
+        if (!savedDirectory.exists()) {
+            savedDirectory.createDirectory();
+        }
+
+        juce::File latestFile;
+        juce::Time latestModificationTime;
+
+        if (savedDirectory.isDirectory()) {
+            juce::Array<juce::File> files = savedDirectory.findChildFiles(
+                juce::File::findFiles, false, "*.xml");
+
+            for (const auto &currentFile : files) {
+                if (currentFile.getLastModificationTime() >
+                    latestModificationTime) {
+                    latestModificationTime =
+                        currentFile.getLastModificationTime();
+                    latestFile = currentFile;
+                }
+            }
+        }
+
+        if (latestFile.existsAsFile()) {
+            edit = tracktion::loadEditFromFile(engine, latestFile);
+            ConfigurationHelpers::setSavedTrackName(latestFile);
         } else {
+            // Generar nombre de archivo basado en la fecha actual
+            auto currentTime = juce::Time::getCurrentTime();
+            auto day =
+                juce::String(currentTime.getDayOfMonth()).paddedLeft('0', 2);
+            auto month = juce::String(currentTime.getMonth() + 1)
+                             .paddedLeft('0', 2); // Meses son 0-based
+            auto year = juce::String(currentTime.getYear());
+            auto hours =
+                juce::String(currentTime.getHours()).paddedLeft('0', 2);
+            auto minutes =
+                juce::String(currentTime.getMinutes()).paddedLeft('0', 2);
+            auto seconds =
+                juce::String(currentTime.getSeconds()).paddedLeft('0', 2);
+
+            juce::String newEditFileName = "edit_" + day + month + year +
+                                           hours + minutes + seconds + ".xml";
+
+            auto editFile = savedDirectory.getChildFile(newEditFileName);
+
+            ConfigurationHelpers::setSavedTrackName(editFile);
+            // Crear el archivo y la edición
             editFile.create();
             edit = tracktion::createEmptyEdit(engine, editFile);
-            edit->ensureNumberOfAudioTracks(8);
+            edit->ensureNumberOfAudioTracks(
+                tracktion::getAudioTracks(*edit).size());
 
             for (auto track : tracktion::getAudioTracks(*edit))
                 track->setColour(appLookAndFeel.getRandomColour());
         }
-
         ConfigurationHelpers::initSamples(engine);
 
         // The master track does not have the default  plugins added to it by
@@ -92,6 +159,7 @@ class GuiAppApplication : public juce::JUCEApplication {
         initialiseAudioDevices();
         mainWindow = std::make_unique<MainWindow>(getApplicationName(), engine,
                                                   *edit, *midiCommandManager);
+
         splash->deleteAfterDelay(juce::RelativeTime::seconds(4.25), false);
     }
 
@@ -104,11 +172,10 @@ class GuiAppApplication : public juce::JUCEApplication {
                 "Attempt to initialise default devices failed!");
         }
     }
-
     void shutdown() override {
         // Add your application's shutdown code here..
-
-        bool success = edit->engine.getTemporaryFileManager()
+        juce::Logger::writeToLog("Shutdown call");
+        /* bool success = edit->engine.getTemporaryFileManager()
                            .getTempDirectory()
                            .deleteRecursively();
         if (!success) {
@@ -116,9 +183,17 @@ class GuiAppApplication : public juce::JUCEApplication {
                                      edit->engine.getTemporaryFileManager()
                                          .getTempDirectory()
                                          .getFullPathName());
-        }
+        }*/
+        juce::Logger::writeToLog("init nullptr");
+
         juce::Logger::setCurrentLogger(nullptr);
         mainWindow = nullptr; // (deletes our window)
+
+        juce::Logger::writeToLog("end nullptr");
+
+        // restartApplication();
+
+        // juce::Logger::writeToLog("Restarted ok");
     }
 
     void systemRequestedQuit() override {
@@ -127,7 +202,14 @@ class GuiAppApplication : public juce::JUCEApplication {
         // allow the app to close.
         quit();
     }
+    void restartApplication() {
+        juce::File currentExecutable(
+            juce::File::getSpecialLocation(juce::File::currentExecutableFile));
 
+        juce::ChildProcess process;
+        process.start(currentExecutable.getFullPathName());
+        // quit();
+    }
     void anotherInstanceStarted(const juce::String &commandLine) override {
         // When another instance of the app is launched while this one is
         // running, this method is invoked, and the commandLine parameter tells

@@ -1,6 +1,7 @@
 #include "SettingsListView.h"
 #include "AudioBufferSizeListView.h"
 #include "DeviceTypeListView.h"
+#include "LoadSaveSongListView.h"
 #include "MidiInputListView.h"
 #include "OutputListView.h"
 #include "SampleRateListView.h"
@@ -70,6 +71,9 @@ void SettingsListView::encoder1ButtonReleased() {
                         edit, deviceManager, midiCommandManager));
                 } else if (selectedItem == viewModel.midiInputSettingName) {
                     stackNavigationController->push(new MidiInputListView(
+                        edit, deviceManager, midiCommandManager));
+                } else if (selectedItem == viewModel.loadSaveTrackSettingName) {
+                    stackNavigationController->push(new LoadSaveSongListView(
                         edit, deviceManager, midiCommandManager));
                 } else {
                     stackNavigationController->push(new AudioBufferSizeListView(
