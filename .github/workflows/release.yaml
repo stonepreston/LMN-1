@@ -7,7 +7,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    container: stonepreston/juce-x86_64-compiler:latest
+    container: iamdey/lmn-3-daw-docker-compiler:amd64
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -24,7 +24,7 @@ jobs:
 
   build_x86_64:
     runs-on: ubuntu-20.04
-    container: stonepreston/juce-x86_64-compiler:latest
+    container: iamdey/lmn-3-daw-docker-compiler:amd64
 
     needs: test
 
@@ -50,7 +50,7 @@ jobs:
 
   build_arm:
     runs-on: ubuntu-20.04
-    container: stonepreston/juce-arm-linux-cross-compiler:latest
+    container: iamdey/lmn-3-daw-docker-compiler:armv7
 
     needs: test
 
@@ -76,7 +76,7 @@ jobs:
 
   build_aarch64:
     runs-on: ubuntu-20.04
-    container: stonepreston/juce-aarch64-linux-cross-compiler:latest
+    container: iamdey/lmn-3-daw-docker-compiler:arm64
 
     needs: test
 
@@ -124,4 +124,3 @@ jobs:
             LMN-3-x86_64.zip
             LMN-3-arm-linux-gnueabihf.zip
             LMN-3-aarch64-linux-gnu.zip
-

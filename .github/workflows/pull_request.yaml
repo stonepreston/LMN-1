@@ -16,7 +16,7 @@ jobs:
   test:
     needs: linting
     runs-on: ubuntu-20.04
-    container: stonepreston/juce-x86_64-compiler:latest
+    container: iamdey/lmn-3-daw-docker-compiler:amd64
     steps:
       - name: checkout
         uses: actions/checkout@v2
